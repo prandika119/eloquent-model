@@ -12,6 +12,7 @@
 <body>
     <div class="m-3">
         <h1 class="text-center m-3">Data Buku</h1>
+        <a href="{{ route('buku.create') }}" class="btn btn-primary float-end">Tambah Buku</a>
         <table class="table table-stripped">
             <thead>
                 <tr>
@@ -33,6 +34,15 @@
                         <td>{{ $buku->penulis }}</td>
                         <td>{{ 'Rp. ' . number_format($buku->harga, 2, ',', '.') }}</td>
                         <td>{{ \Carbon\Carbon::parse($buku->tgl_terbit)->format('d-m-Y') }}</td>
+                        <td class="d-flex">
+                            <form action="{{ route('buku.destroy', $buku->id) }}" method="POST">
+                                @csrf
+                                @method('DELETE')
+                                <button onclick="return confirm('Yakin mau dihapus')" type="submit"
+                                    class="btn btn-danger">Hapus</button>
+                            </form>
+                            <a href="{{ route('buku.edit', $buku->id) }}" class="btn btn-secondary">Edit</a>
+                        </td>
                     </tr>
                 @endforeach
             </tbody>
