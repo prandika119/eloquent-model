@@ -10,6 +10,14 @@
 </head>
 
 <body>
+    {{-- pesan error --}}
+    @if (count($errors) > 0)
+        <ul class="alert alert-danger">
+            @foreach ($errors->all() as $error)
+                <li>{{ $error }}</li>
+            @endforeach
+        </ul>
+    @endif
     <div class="container">
         <h4>Tambah Buku</h4>
         <form action="{{ route('buku.store') }}" method="post">
