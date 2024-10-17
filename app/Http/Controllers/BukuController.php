@@ -10,13 +10,10 @@ class BukuController extends Controller
 {
     public function index()
     {
-        Paginator::useBootstrapFive();
-        $batas = 5;
-        $data_buku = Buku::orderBy('id', 'desc')->paginate($batas);
+        $data_buku = Buku::all();
         $jumlah_buku = Buku::count();
-        $no = $batas * ($data_buku->currentPage() - 1);
-        $cari = false;
-        return view('buku.index', compact('data_buku', 'no', 'jumlah_buku', 'cari'));
+        $no = 0;
+        return view('buku.index', compact('data_buku', 'no', 'jumlah_buku'));
     }
     public function search(Request $request)
     {

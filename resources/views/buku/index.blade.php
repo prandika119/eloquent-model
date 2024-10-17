@@ -7,7 +7,7 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Latihan Eloquent</title>
     <link rel="stylesheet" href="{{ asset('css/bootstrap.min.css') }}" />
-
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.10.12/css/dataTables.bootstrap.min.css" />
 
 <body>
     <div class="m-3">
@@ -17,28 +17,8 @@
             <div class="alert alert-success">{{ Session::get('pesan') }}</div>
         @endif
 
-        @if ($cari)
-            @if (count($data_buku))
-                <div class="alert alert-success">Ditemukan <strong>{{ count($data_buku) }}</strong> data dengan
-                    kata: <strong>{{ $cari }}</strong>
-                </div>
-            @else
-                <div class="alert alert-warning">
-                    <h4>Data {{ $cari }} tidak ditemukan</h4>
-                    <a href="/buku" class="btn btn-warning">Kembali</a>
-                </div>
-            @endif
-        @endif
-
-        <form action="{{ route('buku.search') }}" method="get">
-            @csrf
-            <input type="text" name="kata" class="form-control" placeholder="Cari ... "
-                style="width: 30%;
-            display: inline; margin-top: 10px; margin-bottom: 10px;">
-            <button class="btn btn-primary" type="submit">Search</button>
-        </form>
         <a href="{{ route('buku.create') }}" class="btn btn-primary float-end">Tambah Buku</a>
-        <table class="table table-stripped">
+        <table class="table table-stripped" id="table-data">
             <thead>
                 <tr>
                     <th>id</th>
@@ -73,10 +53,18 @@
                 @endforeach
             </tbody>
         </table>
-        <div>{{ $data_buku->links() }}</div>
         <p class="h4 text-center">jumlah buku: <span>{{ $jumlah_buku }}</span></p>
         <p class="h4 text-center">jumlah harga buku: <span>{{ $data_buku->pluck('harga')->sum() }}</span></p>
     </div>
+
+    <script src="https://code.jquery.com/jquery-3.1.0.js"></script>
+    <script src="https://cdn.datatables.net/1.10.12/js/jquery.dataTables.min.js"></script>
+    <script src="https://cdn.datatables.net/1.11.5/js/dataTables.bootstrap5.min.js"></script>
+    <script>
+        $(document).ready(function() {
+            $('#table-data').DataTable();
+        });
+    </script>
 </body>
 
 </html>
