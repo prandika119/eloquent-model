@@ -8,6 +8,14 @@ use Illuminate\Http\Request;
 
 class BukuController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware('auth')->except([
+            'index',
+            'search'
+        ]);
+    }
+
     public function index()
     {
         $data_buku = Buku::all();

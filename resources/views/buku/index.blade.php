@@ -1,15 +1,6 @@
-<!DOCTYPE html>
-<html lang="en">
-
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Latihan Eloquent</title>
-    <link rel="stylesheet" href="{{ asset('css/bootstrap.min.css') }}" />
-    <link rel="stylesheet" href="https://cdn.datatables.net/1.10.12/css/dataTables.bootstrap.min.css" />
-
-<body>
+@extends('auth.layouts')
+@section('content')
+    ;
     <div class="m-3">
         <h1 class="text-center m-3">Data Buku</h1>
         {{-- pesan sukses --}}
@@ -17,7 +8,9 @@
             <div class="alert alert-success">{{ Session::get('pesan') }}</div>
         @endif
 
-        <a href="{{ route('buku.create') }}" class="btn btn-primary float-end">Tambah Buku</a>
+        @auth
+            <a href="{{ route('buku.create') }}" class="btn btn-primary float-end">Tambah Buku</a>
+        @endauth
         <table class="table table-stripped" id="table-data">
             <thead>
                 <tr>
@@ -26,7 +19,9 @@
                     <th>Penulis</th>
                     <th>Harga</th>
                     <th>Tanggal Terbit</th>
-                    <th>Aksi</th>
+                    @auth
+                        <th>Aksi</th>
+                    @endauth
                 </tr>
             </thead>
             <tbody>
@@ -40,15 +35,17 @@
                         <td>{{ $buku->penulis }}</td>
                         <td>{{ 'Rp. ' . number_format($buku->harga, 0, ',', '.') }}</td>
                         <td>{{ \Carbon\Carbon::parse($buku->tgl_terbit)->format('d-m-Y') }}</td>
-                        <td class="d-flex">
-                            <form action="{{ route('buku.destroy', $buku->id) }}" method="POST">
-                                @csrf
-                                @method('DELETE')
-                                <button onclick="return confirm('Yakin mau dihapus')" type="submit"
-                                    class="btn btn-danger">Hapus</button>
-                            </form>
-                            <a href="{{ route('buku.edit', $buku->id) }}" class="btn btn-secondary">Edit</a>
-                        </td>
+                        @auth
+                            <td class="d-flex">
+                                <form action="{{ route('buku.destroy', $buku->id) }}" method="POST">
+                                    @csrf
+                                    @method('DELETE')
+                                    <button onclick="return confirm('Yakin mau dihapus')" type="submit"
+                                        class="btn btn-danger">Hapus</button>
+                                </form>
+                                <a href="{{ route('buku.edit', $buku->id) }}" class="btn btn-secondary">Edit</a>
+                            </td>
+                        @endauth
                     </tr>
                 @endforeach
             </tbody>
@@ -65,6 +62,4 @@
             $('#table-data').DataTable();
         });
     </script>
-</body>
-
-</html>
+@endsection
