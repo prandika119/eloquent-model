@@ -2,11 +2,13 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\User;
+use App\Jobs\SendMailJob;
 use Illuminate\Http\Request;
+use App\Jobs\RegisteredMailJob;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
-use App\Models\User;
 
 class LoginRegisterController extends Controller
 {
@@ -39,7 +41,7 @@ class LoginRegisterController extends Controller
      */
     public function store(Request $request)
     {
-        $request->validate([
+        $data = $request->validate([
             'name' => 'required|string|max:250',
             'email' => 'required|email|max:250|unique:users',
             'password' => 'required|min:8|confirmed'
@@ -50,7 +52,9 @@ class LoginRegisterController extends Controller
             'email' => $request->email,
             'password' => Hash::make($request->password)
         ]);
+        dispatch(new RegisteredMailJob($data));
 
+        // Autentikasi pengguna
         $credentials = $request->only('email', 'password');
         Auth::attempt($credentials);
         $request->session()->regenerate();
