@@ -15,6 +15,7 @@
             <thead>
                 <tr>
                     <th>id</th>
+                    <th>Cover</th>
                     <th>Judul Buku</th>
                     <th>Penulis</th>
                     <th>Harga</th>
@@ -31,6 +32,7 @@
                     @endphp
                     <tr>
                         <td>{{ $no }}</td>
+                        <td><img src="{{ asset('storage/' . $buku->photo) }}" alt=""></td>
                         <td>{{ $buku->judul }}</td>
                         <td>{{ $buku->penulis }}</td>
                         <td>{{ 'Rp. ' . number_format($buku->harga, 0, ',', '.') }}</td>

@@ -9,16 +9,11 @@ use Symfony\Component\HttpFoundation\Response;
 
 class Admin
 {
-    /**
-     * Handle an incoming request.
-     *
-     * @param  \Closure(\Illuminate\Http\Request): (\Symfony\Component\HttpFoundation\Response)  $next
-     */
     public function handle(Request $request, Closure $next): Response
     {
-        if (!Auth::user()->level == 'admin') {
-            return abort(404);
+        if (Auth::check() && Auth::user()->level == 'admin') {
+            return $next($request);
         }
-        return $next($request);
+        return abort(404);
     }
 }

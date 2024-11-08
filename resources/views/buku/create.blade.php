@@ -20,12 +20,15 @@
     @endif
     <div class="container">
         <h4>Tambah Buku</h4>
-        <form action="{{ route('buku.store') }}" method="post">
+        <form action="{{ route('buku.store') }}" method="post" enctype="multipart/form-data">
             @csrf
-            <div>judul <input type="text" name='judul' class="form-control" /></div>
-            <div>penulis<input type="text" name='penulis' class="form-control" /></div>
-            <div>harga <input type="text" name='harga' class="form-control" /></div>
-            <div>tanggal terbit <input type="date" name='tgl_terbit' class="form-control" /></div>
+            <div>judul <input type="text" name='judul' class="form-control" value="{{ old('judul') }}" /></div>
+            <div>penulis<input type="text" name='penulis' class="form-control" value="{{ old('penulis') }}" /></div>
+            <div>harga <input type="text" name='harga' class="form-control" value="{{ old('harga') }}" /></div>
+            <div>tanggal terbit <input type="date" name='tgl_terbit' class="form-control"
+                    value="{{ old('tgl_terbit') }}" /></div>
+            <div>uploud <input type="file" name='photo' class="form-control @error('photo') is-invalid @enderror"
+                    value="{{ old('photo') }}" /></div>
             <button type="submit" class="btn btn-primary mt-3">Simpan</button>
             <a href="{{ '/buku' }}">Kembali</a>
         </form>

@@ -16,6 +16,9 @@ use App\Http\Controllers\LoginRegisterController;
 |
 */
 
+Route::get('/', function () {
+    return view('try');
+});
 Route::get('/buku', [BukuController::class, 'index'])->name('buku.index');
 Route::get('/buku/create', [BukuController::class, 'create'])->name('buku.create');
 Route::post('/buku', [BukuController::class, 'store'])->name('buku.store');

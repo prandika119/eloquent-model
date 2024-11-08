@@ -10,7 +10,7 @@ class BukuController extends Controller
 {
     public function __construct()
     {
-        $this->middleware('auth')->except([
+        $this->middleware('admin')->except([
             'index',
             'search'
         ]);
@@ -48,20 +48,30 @@ class BukuController extends Controller
                 'penulis' => 'required|string|max:30',
                 'harga' => 'required|numeric',
                 'tgl_terbit' => 'required|date',
+                'photo' => 'nullable|image|max:2000'
             ],
             [
                 'required' => ':attribute wajib diisi',
                 'string' => ':attribute diisi dengan string',
                 'numeric' => ':attribute harus diisi dengan angka',
                 'date' => ':attribute harus diisi dengan tanggal',
-                'max' => ':attribute minimal berisi :max karakter'
+                'max' => ':attribute minimal berisi/berukuran :max karakter/byte',
+                'image' => ':attribute harus berjenis foto'
             ]
         );
+        if ($request->hasFile('photo')) {
+            $filenameWithExt = $request->file('photo')->getClientOriginalName();
+            $filename = pathinfo($filenameWithExt, PATHINFO_FILENAME);
+            $extension = $request->file('photo')->getClientOriginalExtension();
+            $filenameSimpan = $filename . '-' . time() . '.' . $extension;
+            $request->file('photo')->storeAs('public', $filenameSimpan);
+        }
         $buku = new Buku();
         $buku->judul = $request->judul;
         $buku->penulis = $request->penulis;
         $buku->harga = $request->harga;
         $buku->tgl_terbit = $request->tgl_terbit;
+        $buku->photo = $filenameSimpan ?? null;
         $buku->save();
         return redirect('/buku')->with('pesan', 'Data Buku Berhasil Disimpan');
     }
