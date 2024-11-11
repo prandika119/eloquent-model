@@ -3,8 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\Models\Buku;
-use Illuminate\Pagination\Paginator;
 use Illuminate\Http\Request;
+use Illuminate\Pagination\Paginator;
+use Illuminate\Support\Facades\Storage;
 
 class BukuController extends Controller
 {
@@ -48,6 +49,7 @@ class BukuController extends Controller
                 'penulis' => 'required|string|max:30',
                 'harga' => 'required|numeric',
                 'tgl_terbit' => 'required|date',
+                'photo' => 'image|nullable|max:1999'
             ],
             [
                 'required' => ':attribute wajib diisi',
@@ -57,11 +59,20 @@ class BukuController extends Controller
                 'max' => ':attribute minimal berisi :max karakter'
             ]
         );
+        if ($request->hasFile('photo')) {
+            $filenameWithExt = $request->file('photo')->getClientOriginalName();
+            $filename = pathinfo($filenameWithExt, PATHINFO_FILENAME);
+            $extension = $request->file('photo')->getClientOriginalExtension();
+            $filenameSimpan = $filename . '_' . time() . '.' . $extension;
+            $path = $request->file('photo')->storeAs('photos', $filenameSimpan);
+        }
+
         $buku = new Buku();
         $buku->judul = $request->judul;
         $buku->penulis = $request->penulis;
         $buku->harga = $request->harga;
         $buku->tgl_terbit = $request->tgl_terbit;
+        $buku->photo = $filenameSimpan ?? null;
         $buku->save();
         return redirect('/buku')->with('pesan', 'Data Buku Berhasil Disimpan');
     }
@@ -102,5 +113,10 @@ class BukuController extends Controller
         $buku->tgl_terbit = $request->tgl_terbit;
         $buku->save();
         return redirect()->route('buku.index');
+    }
+    public function getPhoto($filename)
+    {
+        // dd(Storage::get('/photos', $filename));
+        return Storage::get('/photos', $filename);
     }
 }

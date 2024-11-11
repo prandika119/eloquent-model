@@ -16,6 +16,7 @@
                 <tr>
                     <th>id</th>
                     <th>Judul Buku</th>
+                    <th>Gambar</th>
                     <th>Penulis</th>
                     <th>Harga</th>
                     <th>Tanggal Terbit</th>
@@ -32,6 +33,13 @@
                     <tr>
                         <td>{{ $no }}</td>
                         <td>{{ $buku->judul }}</td>
+                        {{-- @php
+                            // dd($buku->photo);
+                            dd(Storage::get($buku->photo));
+                        @endphp --}}
+                        <td><img src="{{ route('buku.photo', $buku->photo ?? 'a') }}" alt="buku" width="100px"
+                                height="100px">
+                        </td>
                         <td>{{ $buku->penulis }}</td>
                         <td>{{ 'Rp. ' . number_format($buku->harga, 0, ',', '.') }}</td>
                         <td>{{ \Carbon\Carbon::parse($buku->tgl_terbit)->format('d-m-Y') }}</td>
