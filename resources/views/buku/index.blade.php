@@ -1,6 +1,5 @@
 @extends('auth.layouts')
 @section('content')
-    ;
     <div class="m-3">
         <h1 class="text-center m-3">Data Buku</h1>
         {{-- pesan sukses --}}
@@ -33,25 +32,23 @@
                     <tr>
                         <td>{{ $no }}</td>
                         <td>{{ $buku->judul }}</td>
-                        {{-- @php
-                            // dd($buku->photo);
-                            dd(Storage::get($buku->photo));
-                        @endphp --}}
-                        <td><img src="{{ route('buku.photo', $buku->photo ?? 'a') }}" alt="buku" width="100px"
+                        <td><img src="{{ route('buku.photo', $buku->square_image ?? 'a') }}" alt="buku" width="100px"
                                 height="100px">
                         </td>
                         <td>{{ $buku->penulis }}</td>
                         <td>{{ 'Rp. ' . number_format($buku->harga, 0, ',', '.') }}</td>
                         <td>{{ \Carbon\Carbon::parse($buku->tgl_terbit)->format('d-m-Y') }}</td>
                         @auth
-                            <td class="d-flex">
+                            <td class="d-flex py-5">
                                 <form action="{{ route('buku.destroy', $buku->id) }}" method="POST">
                                     @csrf
                                     @method('DELETE')
                                     <button onclick="return confirm('Yakin mau dihapus')" type="submit"
                                         class="btn btn-danger">Hapus</button>
                                 </form>
-                                <a href="{{ route('buku.edit', $buku->id) }}" class="btn btn-secondary">Edit</a>
+                                <a href="{{ route('buku.edit', $buku->id) }}" class="btn btn-secondary mx-3">Edit</a>
+                                <a href="{{ route('buku.show', $buku->id) }}" class="btn btn-success">Detail</a>
+
                             </td>
                         @endauth
                     </tr>
