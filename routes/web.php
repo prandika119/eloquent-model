@@ -27,6 +27,8 @@ Route::put('/buku/{id}', [BukuController::class, 'update'])->name('buku.update')
 Route::get('/buku/search', [BukuController::class, 'search'])->name('buku.search');
 Route::get('buku/photos/{filename}', [BukuController::class, 'getPhoto'])->name('buku.photo');
 
+Route::get('/books/api', [BukuController::class, 'apiIndex'])->name('buku.api');
+
 
 Route::controller(LoginRegisterController::class)->group(function () {
     Route::get('/register', 'register')->name('register');

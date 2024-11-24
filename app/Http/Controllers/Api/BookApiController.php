@@ -50,12 +50,9 @@ class BookApiController extends Controller
         $buku->save();
         return new BookResource(true, 'Data Buku Berhasil Ditambahkan', $buku);
     }
-    public function resizePhoto($filename)
+    public function show(Buku $buku)
     {
-        $image_ori = Storage::get('photos/' . $filename);
-        $image_square = Image::read($image_ori);
-        $image_square->resize(100, 100);
-        $image_square->save(Storage::path('photos/' . 'square_' . $filename));
+        return new BookResource(true, 'Detail Data Buku', $buku);
     }
     public function update(Request $request, Buku $buku)
     {
@@ -65,7 +62,7 @@ class BookApiController extends Controller
             'penulis' => 'required|string|max:30',
             'harga' => 'required|numeric',
             'tgl_terbit' => 'required|date',
-            // 'photo' => 'image|nullable|max:1999'
+            'photo' => 'image|nullable|max:1999'
         ]);
 
         if ($validator->fails()) {
@@ -84,16 +81,34 @@ class BookApiController extends Controller
             $filenameSimpan = $filename . '_' . time() . '.' . $extension;
             $path = $request->file('photo')->storeAs('photos', $filenameSimpan);
             $this->resizePhoto($filenameSimpan);
-
-            // $buku->square_image = 'square_' . $filenameSimpan ?? null;
+            // $square_image = 'square_' . $filenameSimpan ?? null;
         }
-        // $buku->ori_image = $filenameSimpan == null ? $buku->ori_image : $filenameSimpan;
-        // $buku->square_image = $filenameSimpan == null ? $buku->square_image : 'square_' . $filenameSimpan;
-        $buku->judul = $request->input('judul', $buku->judul);
-        $buku->penulis = $request->input('penulis', $buku->penulis);
-        $buku->harga = $request->input('harga', $buku->harga);
-        $buku->tgl_terbit = $request->input('tgl_terbit', $buku->tgl_terbit);
-        $buku->save();
+        $buku->update([
+            'judul' => $request->judul,
+            'penulis' => $request->penulis,
+            'harga' => $request->harga,
+            'tgl_terbit' => $request->tgl_terbit,
+            'ori_image' => $filenameSimpan !== null ? $filenameSimpan : $buku->ori_image,
+            'square_image' => $filenameSimpan !== null ? 'square_' . $filenameSimpan : $buku->square_image
+        ]);
         return new BookResource(true, 'Data Buku Berhasil Diubah', $buku);
+    }
+
+    public function destroy(Buku $buku)
+    {
+        if ($buku->ori_image) {
+            Storage::delete('photos/' . $buku->ori_image);
+            Storage::delete('photos/' . $buku->square_image);
+        }
+        $buku->delete();
+        return new BookResource(true, 'Data Buku Berhasil Dihapus', null);
+    }
+
+    public function resizePhoto($filename)
+    {
+        $image_ori = Storage::get('photos/' . $filename);
+        $image_square = Image::read($image_ori);
+        $image_square->resize(100, 100);
+        $image_square->save(Storage::path('photos/' . 'square_' . $filename));
     }
 }

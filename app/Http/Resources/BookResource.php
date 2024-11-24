@@ -11,12 +11,6 @@ class BookResource extends JsonResource
     public $message;
     public $resource;
 
-    /**
-     * Transform the resource into an array.
-     *
-     * @return array<string, mixed>
-     */
-
     public function __construct($status, $message, $resource)
     {
         parent::__construct($resource);

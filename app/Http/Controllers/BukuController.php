@@ -29,6 +29,12 @@ class BukuController extends Controller
 
         return view('buku.index', compact('data_buku', 'no', 'jumlah_buku'));
     }
+
+    public function apiIndex()
+    {
+        return view('buku.api.index');
+    }
+
     public function search(Request $request)
     {
         Paginator::useBootstrapFive();

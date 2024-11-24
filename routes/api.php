@@ -20,4 +20,6 @@ Route::get('/info', [InfoController::class, 'index'])->name('info');
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
-Route::apiResource('/books', BookApiController::class);
+
+// routes/api.php
+Route::apiResource('/buku', BookApiController::class);
