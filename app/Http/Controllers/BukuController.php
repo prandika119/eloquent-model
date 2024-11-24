@@ -22,6 +22,7 @@ class BukuController extends Controller
 
     public function index()
     {
+
         $data_buku = Buku::all();
         $jumlah_buku = Buku::count();
         $no = 0;

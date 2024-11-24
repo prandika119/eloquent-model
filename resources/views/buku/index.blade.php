@@ -32,8 +32,7 @@
                     <tr>
                         <td>{{ $no }}</td>
                         <td>{{ $buku->judul }}</td>
-                        <td><img src="{{ route('buku.photo', $buku->square_image ?? 'a') }}" alt="buku" width="100px"
-                                height="100px">
+                        <td><img src="{{ route('buku.photo', $buku->square_image ?? 'a') }}" alt="buku">
                         </td>
                         <td>{{ $buku->penulis }}</td>
                         <td>{{ 'Rp. ' . number_format($buku->harga, 0, ',', '.') }}</td>

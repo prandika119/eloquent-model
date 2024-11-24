@@ -2,6 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\BukuController;
+use App\Http\Controllers\InfoController;
 use App\Http\Controllers\SendEmailController;
 use App\Http\Controllers\LoginRegisterController;
 
